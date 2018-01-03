@@ -36,6 +36,7 @@ for i=1:n
        data_raw=data_single{1, i}(:,[1,2,3,4,5,6,11,12,13,14,19,21]);%取需要的列数比如C3，C4电极
        [dataraw,datarank]=size(data_raw);
        for ii=1:datarank
+           try
          data=data_raw(:,ii);
          data1=filter50(data,256)';%滤波50HZ
          datax=data1(5121:7680,:)*10;%滤波，去除眼电
@@ -76,7 +77,11 @@ for i=1:n
          disp(['正在计算第',num2str(i),'首歌曲第',num2str(ii),'小波各频段时频域特征']);  
          feature=wave_brain(datax*100,256);%alpha,thalt,dalt波的峰值，均值，方差，中心频率，最大功率，功率和
          wave_feature(i,(18*ii-17):ii*18)=feature;%列数为特征，行数为歌曲数
-       end
+           
+             catch
+               continue
+           end
+           end
        sinsong_feature=[wave_feature D_frature k_frature APEn_frature SampEn_frature Ly_frature Coc_frature Sps_feature ...
            lzc_feature SSE_feature];
        songs_feature{1,i}=sinsong_feature;
